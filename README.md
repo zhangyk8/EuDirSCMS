@@ -22,7 +22,7 @@ Some high-level descriptions of our Python scripts are as follows:
 
 ### Euclidean Mean Shift and SCMS Algorithms
 
-Given a random sample <img src="https://latex.codecogs.com/svg.latex?\large&space;\left\{\mathbf{X}_1,...,\mathbf{X}_n\right\}\in\mathbb{R}^D" />, the (Euclidean) kernel density estimator (KDE) is defined as
+Given a random sample <img src="https://latex.codecogs.com/svg.latex?\large&space;\left\{\mathbf{X}_1,...,\mathbf{X}_n\right\}\subset\mathbb{R}^D" />, the (Euclidean) kernel density estimator (KDE) is defined as
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\widehat{p}_n(\mathbf{x})=\frac{c_{k,D}}{nh^D}\sum_{i=1}^nk\left(\left|\left|\frac{\mathbf{x}-\mathbf{X}_i}{h}\right|\right|_2^2\right)," />
 
@@ -35,7 +35,21 @@ with <img src="https://latex.codecogs.com/svg.latex?\large&space;t=0,1,..." />, 
 
 <img src="https://latex.codecogs.com/svg.latex?\large&space;\widehat{\mathbf{x}}^{(t+1)}\gets\widehat{\mathbf{x}}^{(t)}+\widehat{V}_d(\widehat{\mathbf{x}}^{(t)})\widehat{V}_d(\widehat{\mathbf{x}}^{(t)})^T\left[\frac{\sum_{i=1}^n\mathbf{X}_{i}k'\left(\left|\left|\frac{\widehat{\mathbf{x}}^{(t)}-\mathbf{X}_i}{h}\right|\right|_2^2\right)}{\sum_{i=1}^nk'\left(\left|\left|\frac{\widehat{\mathbf{x}}^{(t)}-\mathbf{X}_i}{h}\right|\right|_2^2\right)}-\widehat{\mathbf{x}}^{(t)}\right]" />
 
-with <img src="https://latex.codecogs.com/svg.latex?\large&space;t=0,1,..." />, where <img src="https://latex.codecogs.com/svg.latex?\large&space;\widehat{V}_d(\mathbf{x})=[\widehat{\mathbf{v}}_{d+1}(\mathbf{x}),...,\widehat{\mathbf{v}}_D(\mathbf{x})]" /> has its columns equal to the orthonormal eigenvectors of <img src="https://latex.codecogs.com/svg.latex?\large&space;\nabla\nabla\hat{p}_n(\mathbf{x})" /> associated with its <img src="https://latex.codecogs.com/svg.latex?\large&space;D-d" /> smallest eigenvalues. Here, <img src="https://latex.codecogs.com/svg.latex?\large&space;d" /> is the intrinsic dimension of the estimated Euclidean density ridge.
+with <img src="https://latex.codecogs.com/svg.latex?\large&space;t=0,1,..." />, where <img src="https://latex.codecogs.com/svg.latex?\large&space;\widehat{V}_d(\mathbf{x})=[\widehat{\mathbf{v}}_{d+1}(\mathbf{x}),...,\widehat{\mathbf{v}}_D(\mathbf{x})]" /> has its columns equal to the orthonormal eigenvectors of <img src="https://latex.codecogs.com/svg.latex?\large&space;\nabla\nabla\widehat{p}_n(\mathbf{x})" /> associated with its <img src="https://latex.codecogs.com/svg.latex?\large&space;D-d" /> smallest eigenvalues. Here, <img src="https://latex.codecogs.com/svg.latex?\large&space;d" /> is the intrinsic dimension of the estimated Euclidean density ridge.
+
+### Directional Mean Shift and SCMS Algorithms
+
+While the above Euclidean SCMS algorithm has been widely used in various fields, it exhibits some salient drawbacks in dealing with directional data <img src="https://latex.codecogs.com/svg.latex?\large&space;\left\{\mathbf{X}_1,...,\mathbf{X}_n\right\}\subset\Omega_q" />, where <img src="https://latex.codecogs.com/svg.latex?\large&space;\Omega_q=\left\{\mathbf{x}\in\mathbb{R}^{q+1}:||\mathbf{x}||_2=1\right\}\subset\mathbb{R}^{q+1}" />. See **Fig 1** below for the ridge-finding case and our paper for more details. Under the directional data scenario, the directional KDE is formulated as:
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\widehat{f}_h(\mathbf{x})=\frac{c_{h,q}(L)}{n}\sum_{i=1}^nL\left(\frac{1-\mathbf{x}^T\mathbf{X}_i}{h^2}\right)," />
+
+where <img src="https://latex.codecogs.com/svg.latex?\large&space;L" /> is a directional kernel function, <img src="https://latex.codecogs.com/svg.latex?\large&space;h" /> is the smoothing bandwidth parameter, <img src="https://latex.codecogs.com/svg.latex?\large&space;c_{h,q}\asymp\,h^{-q}" /> is a normalizing constant to ensure that <img src="https://latex.codecogs.com/svg.latex?\large&space;\widehat{f}_h" /> is a probability density function. One famous example of the directional kernel function is the so-called von Mises kernel <img src="https://latex.codecogs.com/svg.latex?\large&space;L(r)=e^{-r}" />. Then, the directional mean shift algorithm has a fixed-point iteration formula:
+
+<img src="https://latex.codecogs.com/svg.latex?\Large&space;\widehat{\underline{\mathbf{x}}}^{(t+1)}=-\frac{\sum_{i=1}^n\mathbf{X}_i\,L'\left(\frac{1-\mathbf{X}_i^T\widehat{\underline{\mathbf{x}}}^{(t)}}{h^2}\right)}{\left|\left|\sum_{i=1}^n\mathbf{X}_i\,L'\left(\frac{1-\mathbf{X}_i^T\widehat{\underline{\mathbf{x}}}^{(t)}}{h^2}\right)\right|\right|_2}=\frac{\nabla\widehat{f}_h(\widehat{\underline{\mathbf{x}}}^{(t)})}{\left|\left|\nabla\widehat{f}_h(\widehat{\underline{\mathbf{x}}}^{(t)})\right|\right|_2}" />
+
+with <img src="https://latex.codecogs.com/svg.latex?\large&space;t=0,1,..." />, where <img src="https://latex.codecogs.com/svg.latex?\large&space;\nabla\widehat{f}_h" /> is the total gradient of the directional KDE computed in the ambient Euclidean space  <img src="https://latex.codecogs.com/svg.latex?\large&space;\mathbb{R}^{q+1}" />; see Zhang and Chen (2020) for its detailed derivation and [https://github.com/zhangyk8/DirMS](https://github.com/zhangyk8/DirMS) for its Python3 implementation.
+
 
 ### Additional Reference
 - U. Ozertem and D. Erdogmus (2011). Locally Defined Principal Curves and Surfaces. _Journal of Machine Learning Research_ **12** 1249-1286.
+- Y. Zhang and Y.-C. Chen (2020). Kernel Smoothing, Mean Shift, and Their Learning Theory with Directional Data. _arXiv preprint arXiv:2010.13523_.
