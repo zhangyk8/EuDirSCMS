@@ -3,10 +3,10 @@
 """
 @author: Yikun Zhang
 
-Last Editing: February 23, 2021
+Last Editing: March 20, 2021
 
-Description: This script contains code for directional KDE and subspace 
-constrained mean shift (SCMS) algorithms with the von Mises kernel.
+Description: This script implements the functions of directional KDE and 
+subspace constrained mean shift (SCMS) algorithm with the von Mises kernel.
 """
 
 import numpy as np
