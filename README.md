@@ -22,7 +22,7 @@ Some high-level descriptions of our Python scripts are as follows:
 
 ### Euclidean Mean Shift and SCMS Algorithms
 
-Given a random sample <img src="https://latex.codecogs.com/svg.latex?\Large&space;\left\{\mathbf{X}_1,...,\mathbf{X}_n\right\}\in\mathbb{R}^D" />, the (Euclidean) kernel density estimator (KDE) is defined as
+Given a random sample <img src="https://latex.codecogs.com/svg.latex?\large&space;\left\{\mathbf{X}_1,...,\mathbf{X}_n\right\}\in\mathbb{R}^D" />, the (Euclidean) kernel density estimator (KDE) is defined as
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\widehat{p}_n(\mathbf{x})=\frac{c_{k,D}}{nh^D}\sum_{i=1}^nk\left(\left|\left|\frac{\mathbf{x}-\mathbf{X}_i}{h}\right|\right|_2^2\right)," />
 
