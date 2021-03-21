@@ -55,6 +55,29 @@ and
 
 with <img src="https://latex.codecogs.com/svg.latex?\large&space;t=0,1,..." />, where <img src="https://latex.codecogs.com/svg.latex?\large&space;\underline{\widehat{V}}_d(\mathbf{x})=[\underline{\widehat{\mathbf{v}}}_{d+1}(\mathbf{x}),...,\underline{\widehat{\mathbf{v}}}_{q+1}(\mathbf{x})]" /> has its columns equal to the orthonormal eigenvectors of the (estimated) Riemannian Hessian <img src="https://latex.codecogs.com/svg.latex?\large&space;\mathcal{H}\widehat{f}_h(\mathbf{x})" /> associated with its <img src="https://latex.codecogs.com/svg.latex?\large&space;q-d" /> smallest eigenvalues with the tangent space <img src="https://latex.codecogs.com/svg.latex?\large&space;T_{\mathbf{x}}" />. Here, <img src="https://latex.codecogs.com/svg.latex?\large&space;d" /> is the intrinsic dimension of the estimated directional density ridge as a submanifold of the unit hypersphere <img src="https://latex.codecogs.com/svg.latex?\large&space;\Omega_q\subset\mathbb{R}^{q+1}" />.
 
+The implementations of Euclidean and directional SCMS algorithms are encapsulated into two Python function called `SCMS_KDE` in the script **SCMS_fun.py** and `SCMS_DirKDE` in the script **DirSCMS_fun.py**, respectively. However, in our applications of these two algorithms, we use their log-density versions `SCMS_Log_KDE` and `SCMS_Log_DirKDE` in the corresponding script. The input arguments for the functions `SCMS_Log_KDE` and `SCMS_Log_DirKDE` are essentially the same; thus, we combine the descriptions of their arguments as follows:
+`def SCMS_Log_KDE(x, data, h=None)`
+ 
+`def SCMS_Log_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, stop_cri='proj_grad')`
+- Parameters:
+    - mesh_0: a (m,D)-array
+          ---- The Euclidean coordinates of m directional initial points in the D-dimensional Euclidean space.
+    - data: a (n,D)-array
+          ---- The Euclidean coordinates of n directional data sample points in the D-dimensional Euclidean space.
+    - d: int
+          ---- The order of the density ridge. (Default: d=1.)
+    - h: float
+          ---- The bandwidth parameter. (Default: h=None. Then a rule of thumb for directional KDEs with the von Mises kernel in Garcia-Portugues (2013) is applied.)
+    - eps: float
+          ---- The precision parameter. (Default: eps=1e-7.)
+    - max_iter: int
+          ---- The maximum number of iterations for the directional SCMS algorithm on each initial point. (Default: max_iter=1000.)
+    - stop_cri: string ('proj_grad'/'pts_diff')
+          ---- The indicator of which stopping criteria that will be used to terminate the SCMS algorithm. (When stop_cri='pts_diff', the errors between two consecutive iteration points need to be smaller than 'eps' for terminating the algorithm. When stop_cri='proj_grad' or others, the projected/principal gradient of the current point need to be smaller than 'eps' for terminating the algorithm.) (Default: stop_cri='proj_grad'.)
+    
+- Return:
+    - SCMS_path: (m,D,T)-array
+          ---- The entire iterative SCMS sequence for each initial point.
 
 
 ### Additional Reference
