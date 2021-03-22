@@ -79,6 +79,7 @@ The implementations of Euclidean and directional SCMS algorithms are encapsulate
     - SCMS_path: (m,D,T)-array
           ---- The entire iterative SCMS sequence for each initial point.
 
+Example code:
 ```bash
 import matplotlib.pyplot as plt
 import numpy as np
@@ -146,6 +147,11 @@ cs = m1.scatter(x_Eu, y_Eu, color='darkgreen', s=25, alpha=1)
 cs = m1.scatter(x_Dir, y_Dir, color='red', s=35, alpha=0.7)
 fig.savefig('./Figures/Output.png')
 ```
+
+<p align="center">
+<img src="https://github.com/zhangyk8/EuDirSCMS/blob/main/Figures/Output.png" style="zoom:60%" />
+ <br><B>Fig 1. </B>An illustration of Euclidean and directional SCMS algorithms applied to a simulated dataset with an underlying circular structure on the sphere. (Here, The red points represent the estimated directional ridge identified by our directional SCMS algorithm. The green points indicate the estimated ridge obtained by the Euclidean SCMS algorithm. And the blue curve exhibits the true circular structure.)
+ </p>
 
 ### Additional Reference
 - U. Ozertem and D. Erdogmus (2011). Locally Defined Principal Curves and Surfaces. _Journal of Machine Learning Research_ **12** 1249-1286.
