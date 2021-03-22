@@ -3,7 +3,7 @@
 """
 @author: Yikun Zhang
 
-Last Editing: January 26, 2021
+Last Editing: March 21, 2021
 
 Description: This script contains code for Euclidean KDE and subspace 
 constrained mean shift (SCMS) algorithm with Gaussian kernel.
@@ -70,6 +70,10 @@ def MS_KDE(mesh_0, data, h=None, eps=1e-7, max_iter=1000):
         max_iter: int
             The maximum number of iterations for the SCMS algorithm on each 
             initial point. (Default: max_iter=1000)
+    
+    Return:
+        MS_path: (m,d,T)-array
+            The entire iterative MS sequence for each initial point.
     '''
     
     n = data.shape[0]   ## Number of data points
@@ -138,8 +142,13 @@ def SCMS_KDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, stop_cri='proj_
             terminate the SCMS algorithm. (When stop_cri='pts_diff', the errors 
             between two consecutive iteration points need to be smaller than 
             'eps' for terminating the algorithm. When stop_cri='proj_grad' or 
-            others, the projected gradient of the current point need to be 
+            others, the projected/principal gradient of the current point need to be 
             smaller than 'eps' for terminating the algorithm.)
+            (Default: stop_cri='proj_grad'.)
+            
+    Return:
+        SCMS_path: (m,D,T)-array
+            The entire iterative SCMS sequence for each initial point.
     '''
     
     n = data.shape[0]  ## Number of data points
@@ -199,7 +208,8 @@ def SCMS_KDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, stop_cri='proj_
     return SCMS_path[:,:,:t]
 
 
-def SCMS_Log_KDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, stop_cri='proj_grad'):
+def SCMS_Log_KDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, 
+                 stop_cri='proj_grad'):
     '''
     Subspace Constrained Mean Shift algorithm with log density and Gaussian kernel
     
@@ -229,8 +239,13 @@ def SCMS_Log_KDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, stop_cri='p
             terminate the SCMS algorithm. (When stop_cri='pts_diff', the errors 
             between two consecutive iteration points need to be smaller than 
             'eps' for terminating the algorithm. When stop_cri='proj_grad' or 
-            others, the projected gradient of the current point need to be 
+            others, the projected/principal gradient of the current point need to be 
             smaller than 'eps' for terminating the algorithm.)
+            (Default: stop_cri='proj_grad'.)
+    
+    Return:
+        SCMS_path: (m,D,T)-array
+            The entire iterative SCMS sequence for each initial point.
     '''
     
     n = data.shape[0]  ## Number of data points

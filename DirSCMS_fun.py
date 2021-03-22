@@ -62,7 +62,8 @@ def DirKDE(x, data, h=None):
     return f_hat
 
 
-def SCMS_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
+def SCMS_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, 
+                    stop_cri='proj_grad'):
     '''
     Directional Subspace Constrained Mean Shift Algorithm with von-Mises kernel 
     
@@ -89,6 +90,19 @@ def SCMS_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
         max_iter: int
             The maximum number of iterations for the directional SCMS algorithm 
             on each initial point. (Default: max_iter=1000.)
+            
+        stop_cri: string ('proj_grad'/'pts_diff')
+            The indicator of which stopping criteria that will be used to 
+            terminate the SCMS algorithm. (When stop_cri='pts_diff', the errors 
+            between two consecutive iteration points need to be smaller than 
+            'eps' for terminating the algorithm. When stop_cri='proj_grad' or 
+            others, the projected/principal (Riemannian) gradient of the current 
+            point need to be smaller than 'eps' for terminating the algorithm.)
+            (Default: stop_cri='proj_grad'.)
+    
+    Return:
+        SCMS_path: (m,D,T)-array
+            The entire iterative SCMS sequence for each initial point.
     '''
     
     n = data.shape[0]  ## Number of data points
@@ -141,8 +155,13 @@ def SCMS_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
                 ## SCMS update
                 x_new = SCMS_v + x_pts.reshape(x_pts.shape[0], )
                 x_new = x_new / LA.norm(x_new)
-                if LA.norm(SCMS_grad) < eps:
-                    conv_sign[i] = 1
+                ## Stopping criteria
+                if stop_cri == 'pts_diff':
+                    if LA.norm(SCMS_v) < eps:
+                        conv_sign[i] = 1
+                else: 
+                    if LA.norm(SCMS_grad) < eps:
+                        conv_sign[i] = 1
                 SCMS_path[i,:,t] = x_new
             else:
                 SCMS_path[i,:,t] = SCMS_path[i,:,t-1]
@@ -154,7 +173,8 @@ def SCMS_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
     return SCMS_path[:,:,:t]
 
 
-def SCMS_Log_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
+def SCMS_Log_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, 
+                    stop_cri='proj_grad'):
     '''
     Directional Subspace Constrained Mean Shift algorithm with log density and 
     von-Mises kernel
@@ -182,6 +202,19 @@ def SCMS_Log_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
         max_iter: int
             The maximum number of iterations for the directional SCMS algorithm 
             on each initial point. (Default: max_iter=1000.)
+            
+        stop_cri: string ('proj_grad'/'pts_diff')
+            The indicator of which stopping criteria that will be used to 
+            terminate the SCMS algorithm. (When stop_cri='pts_diff', the errors 
+            between two consecutive iteration points need to be smaller than 
+            'eps' for terminating the algorithm. When stop_cri='proj_grad' or 
+            others, the projected/principal (Riemannian) gradient of the current 
+            point need to be smaller than 'eps' for terminating the algorithm.)
+            (Default: stop_cri='proj_grad'.)
+    
+    Return:
+        SCMS_path: (m,D,T)-array
+            The entire iterative SCMS sequence for each initial point.
     '''
     
     n = data.shape[0]  ## Number of data points
@@ -238,8 +271,13 @@ def SCMS_Log_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
                 ## SCMS update
                 x_new = SCMS_v + x_pts.reshape(x_pts.shape[0], )
                 x_new = x_new / LA.norm(x_new)
-                if LA.norm(SCMS_grad) < eps:
-                    conv_sign[i] = 1
+                ## Stopping criteria
+                if stop_cri == 'pts_diff':
+                    if LA.norm(SCMS_v) < eps:
+                        conv_sign[i] = 1
+                else: 
+                    if LA.norm(SCMS_grad) < eps:
+                        conv_sign[i] = 1
                 SCMS_path[i,:,t] = x_new
             else:
                 SCMS_path[i,:,t] = SCMS_path[i,:,t-1]
@@ -279,6 +317,10 @@ def SCMS_DirKDE_org(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
         max_iter: int
             The maximum number of iterations for the directional SCMS algorithm 
             on each initial point. (Default: max_iter=1000.)
+    
+    Return:
+        SCMS_path: (m,D,T)-array
+            The entire iterative SCMS sequence for each initial point.
     '''
     
     n = data.shape[0]  ## Number of data points
@@ -346,27 +388,36 @@ def SCMS_DirKDE_org(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
 
 def SCMS_Log_DirKDE_org(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
     '''
-    Subspace Constrained Mean Shift algorithm with the log density and von-Mises kernel for q-dimensional directional data
+    Subspace Constrained Mean Shift algorithm with the log density and 
+    von-Mises kernel for q-dimensional directional data
     
-    Parameters
-    --------
-    mesh_0: a (m,3)-array
-       The coordinates of m initial points.
+    Parameters:
+        mesh_0: a (m,D)-array
+            The Euclidean coordinates of m directional initial points in the 
+            D-dimensional Euclidean space.
     
-    data: a (n,3)-array
-       The coordinates of n directional data sample points.
+        data: a (n,D)-array
+            The Euclidean coordinates of n directional data sample points in the 
+            D-dimensional Euclidean space.
        
-    d: int
-       The order of the density ridge.
+        d: int
+            The order of the density ridge. (Default: d=1.)
        
-    h: float
-       The bandwidth parameter.
+        h: float
+            The bandwidth parameter. (Default: h=None. Then a rule of thumb for 
+            directional KDEs with the von Mises kernel in Garcia-Portugues (2013)
+            is applied.)
        
-    eps: float
-       The precision parameter.
+        eps: float
+            The precision parameter. (Default: eps=1e-7.)
        
-    max_iter: int
-       The maximum number of iterations for the SCMS algorithm.
+        max_iter: int
+            The maximum number of iterations for the directional SCMS algorithm 
+            on each initial point. (Default: max_iter=1000.)
+    
+    Return:
+        SCMS_path: (m,D,T)-array
+            The entire iterative SCMS sequence for each initial point.
     '''
     
     n = data.shape[0]  ## Number of data points
