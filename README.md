@@ -39,7 +39,7 @@ with <img src="https://latex.codecogs.com/svg.latex?\large&space;t=0,1,..." />, 
 
 ### Directional Mean Shift and SCMS Algorithms
 
-While the above Euclidean SCMS algorithm has been widely used in various fields, it exhibits some salient drawbacks in dealing with directional data <img src="https://latex.codecogs.com/svg.latex?\large&space;\left\{\mathbf{X}_1,...,\mathbf{X}_n\right\}\subset\Omega_q" />, where <img src="https://latex.codecogs.com/svg.latex?\large&space;\Omega_q=\left\{\mathbf{x}\in\mathbb{R}^{q+1}:||\mathbf{x}||_2=1\right\}\subset\mathbb{R}^{q+1}" />. See **Fig 1** below for the ridge-finding case and our paper for more details. Under the directional data scenario, the directional KDE is formulated as:
+While the above Euclidean SCMS algorithm has been widely used in various fields, it exhibits some salient drawbacks in dealing with directional data <img src="https://latex.codecogs.com/svg.latex?\large&space;\left\{\mathbf{X}_1,...,\mathbf{X}_n\right\}\subset\Omega_q" />, where <img src="https://latex.codecogs.com/svg.latex?\large&space;\Omega_q=\left\{\mathbf{x}\in\mathbb{R}^{q+1}:||\mathbf{x}||_2=1\right\}\subset\mathbb{R}^{q+1}" />; see **Fig 1** below for the ridge-finding case and our paper for more details. Under the directional data scenario, the directional KDE is formulated as:
 
 <img src="https://latex.codecogs.com/svg.latex?\Large&space;\widehat{f}_h(\mathbf{x})=\frac{c_{h,q}(L)}{n}\sum_{i=1}^nL\left(\frac{1-\mathbf{x}^T\mathbf{X}_i}{h^2}\right)," />
 
@@ -55,8 +55,8 @@ and
 
 with <img src="https://latex.codecogs.com/svg.latex?\large&space;t=0,1,..." />, where <img src="https://latex.codecogs.com/svg.latex?\large&space;\underline{\widehat{V}}_d(\mathbf{x})=[\underline{\widehat{\mathbf{v}}}_{d+1}(\mathbf{x}),...,\underline{\widehat{\mathbf{v}}}_{q+1}(\mathbf{x})]" /> has its columns equal to the orthonormal eigenvectors of the (estimated) Riemannian Hessian <img src="https://latex.codecogs.com/svg.latex?\large&space;\mathcal{H}\widehat{f}_h(\mathbf{x})" /> associated with its <img src="https://latex.codecogs.com/svg.latex?\large&space;q-d" /> smallest eigenvalues with the tangent space <img src="https://latex.codecogs.com/svg.latex?\large&space;T_{\mathbf{x}}" />. Here, <img src="https://latex.codecogs.com/svg.latex?\large&space;d" /> is the intrinsic dimension of the estimated directional density ridge as a submanifold of the unit hypersphere <img src="https://latex.codecogs.com/svg.latex?\large&space;\Omega_q\subset\mathbb{R}^{q+1}" />.
 
-The implementations of Euclidean and directional SCMS algorithms are encapsulated into two Python function called `SCMS_KDE` in the script **SCMS_fun.py** and `SCMS_DirKDE` in the script **DirSCMS_fun.py**, respectively. However, in our applications of these two algorithms, we use their log-density versions `SCMS_Log_KDE` and `SCMS_Log_DirKDE` in the corresponding script. The input arguments for the functions `SCMS_Log_KDE` and `SCMS_Log_DirKDE` are essentially the same; thus, we combine the descriptions of their arguments as follows:
-`def SCMS_Log_KDE(x, data, h=None)`
+The implementations of Euclidean and directional SCMS algorithms are encapsulated into two Python function called `SCMS_KDE` in the script **SCMS_fun.py** and `SCMS_DirKDE` in the script **DirSCMS_fun.py**, respectively. However, in our applications of these two algorithms, we use their log-density versions `SCMS_Log_KDE` and `SCMS_Log_DirKDE` in the corresponding scripts. The input arguments for the functions `SCMS_Log_KDE` and `SCMS_Log_DirKDE` are essentially the same; thus, we combine the descriptions of their arguments as follows:
+`def SCMS_Log_KDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, stop_cri='proj_grad')`
  
 `def SCMS_Log_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000, stop_cri='proj_grad')`
 - Parameters:
@@ -73,13 +73,81 @@ The implementations of Euclidean and directional SCMS algorithms are encapsulate
     - max_iter: int
           ---- The maximum number of iterations for the directional SCMS algorithm on each initial point. (Default: max_iter=1000.)
     - stop_cri: string ('proj_grad'/'pts_diff')
-          ---- The indicator of which stopping criteria that will be used to terminate the SCMS algorithm. (When stop_cri='pts_diff', the errors between two consecutive iteration points need to be smaller than 'eps' for terminating the algorithm. When stop_cri='proj_grad' or others, the projected/principal gradient of the current point need to be smaller than 'eps' for terminating the algorithm.) (Default: stop_cri='proj_grad'.)
+          ---- The indicator of which stopping criteria that will be used to terminate the SCMS algorithm. (When stop_cri='pts_diff', the errors between two consecutive iteration points need to be smaller than 'eps' for terminating the algorithm. When stop_cri='proj_grad' or others, the projected/principal (Riemannian) gradient of the current point need to be smaller than 'eps' for terminating the algorithm.) (Default: stop_cri='proj_grad'.)
     
 - Return:
     - SCMS_path: (m,D,T)-array
           ---- The entire iterative SCMS sequence for each initial point.
 
+```bash
+import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.basemap import Basemap
+from Utility_fun import cart2sph, Cir_Sph_samp
+from SCMS_fun import KDE, SCMS_Log_KDE
+from DirSCMS_fun import DirKDE, SCMS_Log_DirKDE
+
+np.random.seed(111)  ## Set an arbitrary seed for reproducibility
+## Sampling the points on a circle that crosses through the north and south poles
+cir_samp = Cir_Sph_samp(1000, lat_c=0, sigma=0.2, pv_ax=np.array([1,0,0]))
+lon_c, lat_c, r = cart2sph(*cir_samp.T)
+cir_samp_ang = np.concatenate((lon_c.reshape(len(lon_c),1), 
+                               lat_c.reshape(len(lat_c),1)), axis=1)
+    
+## Denoising step
+bw_Dir = None
+d_hat2_Dir = DirKDE(cir_samp, cir_samp, h=bw_Dir)
+tau = 0.1
+print('Removing the data points whose directional KDE values are below '
+      +str(tau)+' of the maximum density.')
+cir_samp_thres = cir_samp[d_hat2_Dir >= tau*max(d_hat2_Dir),:]
+print('Ratio of the numbers of data points after and before the denoising '\
+      'step: ' + str(cir_samp_thres.shape[0]/cir_samp.shape[0]) + '.\n')
+bw_Eu = None
+d_hat2_Eu = KDE(cir_samp_ang, cir_samp_ang, h=bw_Eu)
+tau = 0.1
+print('Removing the data points whose Euclidean KDE values are below '\
+      +str(tau)+' of the maximum density.')
+cir_samp_ang_thres = cir_samp_ang[d_hat2_Eu >= tau*max(d_hat2_Eu),:]
+print('Ratio of the numbers of data points after and before the denoising '\
+      'step: ' + str(cir_samp_ang_thres.shape[0]/cir_samp_ang.shape[0]) + '.\n')
+
+## Apply the directional and Euclidean SCMS algorithms
+SCMS_Dir_log2 = SCMS_Log_DirKDE(cir_samp_thres, cir_samp, d=1, h=bw_Dir, 
+                                eps=1e-7, max_iter=5000)
+Dir_ridge_log2 = SCMS_Dir_log2[:,:,SCMS_Dir_log2.shape[2]-1]
+    
+SCMS_Eu_log2 = SCMS_Log_KDE(cir_samp_ang_thres, cir_samp_ang, d=1, h=bw_Eu, 
+                            eps=1e-7, max_iter=5000)
+Eu_ridge_log2 = SCMS_Eu_log2[:,:,SCMS_Eu_log2.shape[2]-1]
+    
+fig = plt.figure(figsize=(14,8))
+lon_t = np.concatenate([90*np.ones(50,), -90*np.ones(50,)])
+lat_t = np.concatenate([np.linspace(-90, 90, 50), np.linspace(90, -90, 50)])
+lon_c, lat_c, r = cart2sph(*cir_samp.T)
+lon_r_Eu = Eu_ridge_log2[:,0]
+lat_r_Eu = Eu_ridge_log2[:,1]
+lon_r_Dir, lat_r_Dir, r = cart2sph(*Dir_ridge_log2.T)
+# Set up map projection
+m1 = Basemap(projection='hammer', llcrnrlon=-180, urcrnrlon=180,
+             llcrnrlat=-90, urcrnrlat=90, resolution='c', lon_0=0)
+# Draw lat/lon grid lines every 30 degrees.
+m1.drawmeridians(np.arange(-180, 180, 30))
+m1.drawparallels(np.arange(-90, 90, 30))
+# Compute native map projection coordinates of lat/lon grid.
+x, y = m1(lon_c, lat_c)
+x_t, y_t = m1(lon_t, lat_t)
+x_Eu, y_Eu = m1(lon_r_Eu, lat_r_Eu)
+x_Dir, y_Dir = m1(lon_r_Dir, lat_r_Dir)
+# Scatter plots over the map.
+cs = m1.scatter(x, y, facecolors='none', edgecolors='black', s=20)
+cs = m1.plot(x_t, y_t, color='blue', linewidth=4, alpha=0.5)
+cs = m1.scatter(x_Eu, y_Eu, color='darkgreen', s=25, alpha=1)
+cs = m1.scatter(x_Dir, y_Dir, color='red', s=35, alpha=0.7)
+fig.savefig('./Figures/Output.png')
+```
 
 ### Additional Reference
 - U. Ozertem and D. Erdogmus (2011). Locally Defined Principal Curves and Surfaces. _Journal of Machine Learning Research_ **12** 1249-1286.
 - Y. Zhang and Y.-C. Chen (2020). Kernel Smoothing, Mean Shift, and Their Learning Theory with Directional Data. _arXiv preprint arXiv:2010.13523_.
+- E. Garcia-Portugues (2013). Exact risk improvement of bandwidth selectors for kernel density estimation with directional data. _Electronic Journal of Statistics_ **7** 1655–1685.
