@@ -15,7 +15,7 @@ Some high-level descriptions of our Python scripts are as follows:
 - **DirSCMS_fun.py**: This script implements the functions of directional KDE and subspace constrained mean shift (SCMS) algorithm with the von Mises kernel.
 - **Drawback_Eu.py**: This script contains code for comparing Euclidean KDE with directional KDE as well as comparing Euclidean subspace constrained mean shift (SCMS) with our proposed directional SCMS algorithm on simulated datasets in order to illustrate the drawbacks of Euclidean KDE and SCMS algorithm in handling directional data (Figure B.2 in the paper).
 - **Earthquake_Ridges.py**: This script contains code for our applications of Euclidean and directional SCMS algorithms to the earthquake data (Figures C.3 in the paper).
-- **Eu_Dir_Ridges.py**: This script contains code for applying Euclidean and directional subspace constrained mean shift (SCMS) algorithm to simulated datasets (Figure 1.1 in the paper).
+- **Eu_Dir_Ridges.py**: This script contains code for applying Euclidean and directional subspace constrained mean shift (SCMS) algorithm to simulated datasets (Figure 1.1 in the paper). This script may take more than half an hour to execute, depending on the implementation environment.
 - **LC_plots.py**: This script contains code for empirically verifying the linear convergence of Euclidean and directional SCMS algorithms (Figures C.1 and C.2 in the paper).
 - **SCMS_fun.py**: This script contains code for Euclidean KDE and subspace constrained mean shift (SCMS) algorithm with Gaussian kernel.
 - **Utility_fun.py**: This script contains all the utility functions for our experiments.
