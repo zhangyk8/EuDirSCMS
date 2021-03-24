@@ -3,7 +3,7 @@
 """
 @author: Yikun Zhang
 
-Last Editing: March 20, 2021
+Last Editing: March 24, 2021
 
 Description: This script implements the functions of directional KDE and 
 subspace constrained mean shift (SCMS) algorithm with the von Mises kernel.
@@ -134,9 +134,9 @@ def SCMS_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000,
             if conv_sign[i] == 0:
                 x_pts = SCMS_path[i,:,t-1].reshape(D, 1)
                 ## Compute the Hessian matrix
-                Hess = np.exp(-1/(h**2))*np.dot(data.T, data*np.exp(np.dot(data, x_pts)/(h**2)))/(h**2) \
-                    - np.exp(-1/(h**2))*np.diag(np.sum(np.dot(data, x_pts) \
-                                 * np.exp(np.dot(data, x_pts)/(h**2))) * np.ones(len(x_pts),))
+                Hess = np.dot(data.T, data*np.exp((np.dot(data, x_pts)-1)/(h**2)))/(h**2) \
+                       - np.diag(np.sum(np.dot(data, x_pts) \
+                                 * np.exp((np.dot(data, x_pts)-1)/(h**2))) * np.ones(len(x_pts),))
                 x_pts = x_pts.reshape(len(x_pts), 1)
                 proj_mat = np.diag(np.ones(x_pts.shape[0],)) - np.dot(x_pts, x_pts.T)
                 Hess = np.dot(np.dot(proj_mat, Hess), proj_mat)
@@ -145,8 +145,7 @@ def SCMS_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000,
                 tang_eig_v = v[:, (abs(np.dot(x_pts.T, v)) < 1e-8)[0,:]]
                 tang_eig_w = w[(abs(np.dot(x_pts.T, v)) < 1e-8)[0,:]]
                 V_d = tang_eig_v[:, np.argsort(tang_eig_w)[:(x_pts.shape[0]-1-d)]]
-                vtot_grad = np.sum(data*np.exp(np.dot(data, x_pts)/(h**2)), axis=0) \
-                            * np.exp(-1/(h**2))
+                vtot_grad = np.sum(data*np.exp((np.dot(data, x_pts)-1)/(h**2)), axis=0)
                 ## Iterative vector for the directional mean shift algorithm
                 ms_v = vtot_grad / LA.norm(vtot_grad)
                 ## Subspace constrained gradient and mean shift vector
@@ -247,14 +246,14 @@ def SCMS_Log_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000,
                 x_pts = SCMS_path[i,:,t-1]
                 x_pts = x_pts.reshape(len(x_pts), 1)
                 ## Compute the directional KDE up to a constant
-                den_prop = np.sum(np.exp(np.dot(data, x_pts)/(h**2)))
+                den_prop = np.sum(np.exp((np.dot(data, x_pts)-1)/(h**2)))
                 ## Compute the total gradient of the log density
-                vtot_Log_grad = np.sum(data*np.exp(np.dot(data, x_pts)/(h**2)), axis=0) \
+                vtot_Log_grad = np.sum(data*np.exp((np.dot(data, x_pts)-1)/(h**2)), axis=0) \
                                 / ((h**2)*den_prop)
                 ## Compute the Hessian of the log density 
-                Log_Hess = np.dot(data.T, data*np.exp(np.dot(data, x_pts)/(h**2)))/((h**4)*den_prop) \
+                Log_Hess = np.dot(data.T, data*np.exp((np.dot(data, x_pts)-1)/(h**2)))/((h**4)*den_prop) \
                            - np.dot(vtot_Log_grad.reshape(D,1), vtot_Log_grad.reshape(1,D)) \
-                           - np.diag(np.sum(np.dot(data, x_pts) * np.exp(np.dot(data, x_pts)/(h**2))) \
+                           - np.diag(np.sum(np.dot(data, x_pts) * np.exp((np.dot(data, x_pts)-1)/(h**2))) \
                                      * np.ones(D,))/((h**2)*den_prop)
                 proj_mat = np.diag(np.ones(D,)) - np.dot(x_pts, x_pts.T)
                 Log_Hess = np.dot(np.dot(proj_mat, Log_Hess), proj_mat)
@@ -271,13 +270,8 @@ def SCMS_Log_DirKDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000,
                 ## SCMS update
                 x_new = SCMS_v + x_pts.reshape(x_pts.shape[0], )
                 x_new = x_new / LA.norm(x_new)
-                ## Stopping criteria
-                if stop_cri == 'pts_diff':
-                    if LA.norm(SCMS_v) < eps:
-                        conv_sign[i] = 1
-                else: 
-                    if LA.norm(SCMS_grad) < eps:
-                        conv_sign[i] = 1
+                if LA.norm(SCMS_grad) < eps:
+                    conv_sign[i] = 1
                 SCMS_path[i,:,t] = x_new
             else:
                 SCMS_path[i,:,t] = SCMS_path[i,:,t-1]
@@ -352,9 +346,9 @@ def SCMS_DirKDE_org(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
             if conv_sign[i] == 0:
                 x_pts = SCMS_path[i,:,t-1].reshape(D, 1)
                 ## Compute the Hessian matrix
-                Hess = np.exp(-1/(h**2))*np.dot(data.T, data*np.exp(np.dot(data, x_pts)/(h**2)))/(h**2) \
-                    - np.exp(-1/(h**2))*np.diag(np.sum(np.dot(data, x_pts) \
-                                 * np.exp(np.dot(data, x_pts)/(h**2))) * np.ones(len(x_pts),))
+                Hess = np.dot(data.T, data*np.exp((np.dot(data, x_pts)-1)/(h**2)))/(h**2) \
+                       - np.diag(np.sum(np.dot(data, x_pts) \
+                                 * np.exp((np.dot(data, x_pts)-1)/(h**2))) * np.ones(len(x_pts),))
                 x_pts = x_pts.reshape(len(x_pts), 1)
                 proj_mat = np.diag(np.ones(x_pts.shape[0],)) - np.dot(x_pts, x_pts.T)
                 Hess = np.dot(np.dot(proj_mat, Hess), proj_mat)
@@ -363,10 +357,10 @@ def SCMS_DirKDE_org(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
                 tang_eig_v = v[:, (abs(np.dot(x_pts.T, v)) < 1e-8)[0,:]]
                 tang_eig_w = w[(abs(np.dot(x_pts.T, v)) < 1e-8)[0,:]]
                 V_d = tang_eig_v[:, np.argsort(tang_eig_w)[:(x_pts.shape[0]-1-d)]]
-                vtot_grad = np.sum(data*np.exp(np.dot(data, x_pts)/(h**2)), axis=0) * np.exp(-1/(h**2))
+                vtot_grad = np.sum(data*np.exp((np.dot(data, x_pts)-1)/(h**2)), axis=0)
                 ## Mean Shift vector
-                ms_v = np.sum(data*np.exp(np.dot(data, x_pts)/(h**2)), axis=0) \
-                       / np.sum(np.exp(np.dot(data, x_pts)/(h**2)))
+                ms_v = np.sum(data*np.exp((np.dot(data, x_pts)-1)/(h**2)), axis=0) \
+                       / np.sum(np.exp((np.dot(data, x_pts)-1)/(h**2)))
                 ## Subspace constrained gradient and mean shift vector
                 SCMS_grad = np.dot(V_d, np.dot(V_d.T, vtot_grad))
                 SCMS_v = np.dot(V_d, np.dot(V_d.T, ms_v))
@@ -450,14 +444,14 @@ def SCMS_Log_DirKDE_org(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
                 x_pts = SCMS_path[i,:,t-1]
                 x_pts = x_pts.reshape(len(x_pts), 1)
                 ## Compute the directional KDE up to a constant
-                den_prop = np.sum(np.exp(np.dot(data, x_pts)/(h**2)))
+                den_prop = np.sum(np.exp((np.dot(data, x_pts)-1)/(h**2)))
                 ## Compute the total gradient of the log density
-                vtot_Log_grad = np.sum(data*np.exp(np.dot(data, x_pts)/(h**2)), axis=0) \
+                vtot_Log_grad = np.sum(data*np.exp((np.dot(data, x_pts)-1)/(h**2)), axis=0) \
                                 / ((h**2)*den_prop)
                 ## Compute the Hessian of the log density 
-                Log_Hess = np.dot(data.T, data*np.exp(np.dot(data, x_pts)/(h**2)))/((h**4)*den_prop) \
+                Log_Hess = np.dot(data.T, data*np.exp((np.dot(data, x_pts)-1)/(h**2)))/((h**4)*den_prop) \
                            - np.dot(vtot_Log_grad.reshape(D,1), vtot_Log_grad.reshape(1,D)) \
-                           - np.diag(np.sum(np.dot(data, x_pts) * np.exp(np.dot(data, x_pts)/(h**2))) \
+                           - np.diag(np.sum(np.dot(data, x_pts) * np.exp((np.dot(data, x_pts)-1)/(h**2))) \
                                      * np.ones(D,))/((h**2)*den_prop)
                 proj_mat = np.diag(np.ones(D,)) - np.dot(x_pts, x_pts.T)
                 Log_Hess = np.dot(np.dot(proj_mat, Log_Hess), proj_mat)
@@ -467,8 +461,8 @@ def SCMS_Log_DirKDE_org(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000):
                 tang_eig_w = w[(abs(np.dot(x_pts.T, v)) < 1e-8)[0,:]]
                 V_d = tang_eig_v[:, np.argsort(tang_eig_w)[:(x_pts.shape[0]-1-d)]]
                 ## Mean Shift vector
-                ms_v = np.sum(data*np.exp(np.dot(data, x_pts)/(h**2)), axis=0) \
-                       / np.sum(np.exp(np.dot(data, x_pts)/(h**2)))
+                ms_v = np.sum(data*np.exp((np.dot(data, x_pts)-1)/(h**2)), axis=0) \
+                       / np.sum(np.exp((np.dot(data, x_pts)-1)/(h**2)))
                 ## Subspace constrained gradient and mean shift vector
                 SCMS_grad = np.dot(V_d, np.dot(V_d.T, vtot_Log_grad))
                 SCMS_v = np.dot(V_d, np.dot(V_d.T, ms_v))

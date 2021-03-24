@@ -3,7 +3,7 @@
 """
 @author: Yikun Zhang
 
-Last Editing: March 20, 2021
+Last Editing: March 24, 2021
 
 Description: This script contains code for empirically verifying the linear 
 convergence of Euclidean and directional SCMS algorithms (Figures C.1 and C.2 
@@ -235,20 +235,20 @@ if __name__ == "__main__":
     
     ## Apply our directional SCMS algorithm to synthetic vMF-distributed data points
     SCMS_path2_log = SCMS_Log_DirKDE(qpts_thres, vMF_data2, d=1, h=None, 
-                                     eps=1e-8, max_iter=5000)
+                                     eps=1e-7, max_iter=5000)
     vMF_Ridge2 = SCMS_path2_log[:,:,SCMS_path2_log.shape[2]-1]
     
     ## Pick two points for plotting their SCMS trajectories on the sphere and 
     ## linear convergence trends
     pt3 = np.array([-30, 30])
     pt3 = np.array(sph2cart(*pt3)).reshape(1,-1)
-    p3_SCMS_path = SCMS_Log_DirKDE(pt3, vMF_data2, d=1, h=None, eps=1e-8, 
+    p3_SCMS_path = SCMS_Log_DirKDE(pt3, vMF_data2, d=1, h=None, eps=1e-7, 
                                    max_iter=5000)
     p3_SCMS_path = np.concatenate(p3_SCMS_path, axis=0).T
     
     pt4 = np.array([-60, 60])
     pt4 = np.array(sph2cart(*pt4)).reshape(1,-1)
-    p4_SCMS_path = SCMS_Log_DirKDE(pt4, vMF_data2, d=1, h=None, eps=1e-8, 
+    p4_SCMS_path = SCMS_Log_DirKDE(pt4, vMF_data2, d=1, h=None, eps=1e-7, 
                                    max_iter=5000)
     p4_SCMS_path = np.concatenate(p4_SCMS_path, axis=0).T
     
