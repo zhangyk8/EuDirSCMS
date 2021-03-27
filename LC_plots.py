@@ -53,16 +53,16 @@ if __name__ == "__main__":
     
     ## Apply Euclidean SCMS algorithm to the denoised Gaussian mixture synthetic dataset
     SCMS_log_path = SCMS_Log_KDE(Gau_data_thres, Gau_data, d=1, h=None, 
-                                 eps=1e-10, max_iter=5000, stop_cri='proj_grad')
+                                 eps=1e-9, max_iter=5000, stop_cri='proj_grad')
     ridge_pts2 = SCMS_log_path[:,:,SCMS_log_path.shape[2]-1]
     
     # Choose two points for plotting their SCMS trajectories and linear convergence trends
     pt1 = np.array([[-1.5, -2.5]])
-    p1_SCMS_path = SCMS_Log_KDE(pt1, Gau_data, d=1, h=None, eps=1e-10, 
+    p1_SCMS_path = SCMS_Log_KDE(pt1, Gau_data, d=1, h=None, eps=1e-9, 
                                 max_iter=5000, stop_cri='proj_grad')
     p1_SCMS_path = np.concatenate(p1_SCMS_path, axis=0).T
     pt2 = np.array([[0, 1]])
-    p2_SCMS_path = SCMS_Log_KDE(pt2, Gau_data, d=1, h=None, eps=1e-10, 
+    p2_SCMS_path = SCMS_Log_KDE(pt2, Gau_data, d=1, h=None, eps=1e-9, 
                                 max_iter=5000, stop_cri='proj_grad')
     p2_SCMS_path = np.concatenate(p2_SCMS_path, axis=0).T
     
@@ -143,17 +143,17 @@ if __name__ == "__main__":
     
     ## Apply Euclidean SCMS algorithm to the half-circle simulated dataset
     SCMS_Eu_log2 = SCMS_Log_KDE(ring_Eu_thres, ring_Eu, d=1, h=curr_bw, 
-                                eps=1e-10, max_iter=5000)
+                                eps=1e-9, max_iter=5000)
     Eu_ridge_log2 = SCMS_Eu_log2[:,:,SCMS_Eu_log2.shape[2]-1]
     
     ## Choose two points for plot their SCMS trajectories and linear convergence trends
     pt3 = np.array([[0, 0]])
-    p3_SCMS_path = SCMS_Log_KDE(pt3, ring_Eu, d=1, h=None, eps=1e-10, 
+    p3_SCMS_path = SCMS_Log_KDE(pt3, ring_Eu, d=1, h=None, eps=1e-9, 
                                 max_iter=5000, stop_cri='proj_grad')
     p3_SCMS_path = np.concatenate(p3_SCMS_path, axis=0).T
     
     pt4 = np.array([[2, 3]])
-    p4_SCMS_path = SCMS_Log_KDE(pt4, ring_Eu, d=1, h=None, eps=1e-10, 
+    p4_SCMS_path = SCMS_Log_KDE(pt4, ring_Eu, d=1, h=None, eps=1e-9, 
                                 max_iter=5000, stop_cri='proj_grad')
     p4_SCMS_path = np.concatenate(p4_SCMS_path, axis=0).T
     
@@ -235,20 +235,20 @@ if __name__ == "__main__":
     
     ## Apply our directional SCMS algorithm to synthetic vMF-distributed data points
     SCMS_path2_log = SCMS_Log_DirKDE(qpts_thres, vMF_data2, d=1, h=None, 
-                                     eps=1e-7, max_iter=5000)
+                                     eps=1e-9, max_iter=5000)
     vMF_Ridge2 = SCMS_path2_log[:,:,SCMS_path2_log.shape[2]-1]
     
     ## Pick two points for plotting their SCMS trajectories on the sphere and 
     ## linear convergence trends
     pt3 = np.array([-30, 30])
     pt3 = np.array(sph2cart(*pt3)).reshape(1,-1)
-    p3_SCMS_path = SCMS_Log_DirKDE(pt3, vMF_data2, d=1, h=None, eps=1e-7, 
+    p3_SCMS_path = SCMS_Log_DirKDE(pt3, vMF_data2, d=1, h=None, eps=1e-9, 
                                    max_iter=5000)
     p3_SCMS_path = np.concatenate(p3_SCMS_path, axis=0).T
     
     pt4 = np.array([-60, 60])
     pt4 = np.array(sph2cart(*pt4)).reshape(1,-1)
-    p4_SCMS_path = SCMS_Log_DirKDE(pt4, vMF_data2, d=1, h=None, eps=1e-7, 
+    p4_SCMS_path = SCMS_Log_DirKDE(pt4, vMF_data2, d=1, h=None, eps=1e-9, 
                                    max_iter=5000)
     p4_SCMS_path = np.concatenate(p4_SCMS_path, axis=0).T
     
@@ -329,20 +329,20 @@ if __name__ == "__main__":
     
     ## Apply our directional SCMS algorithm to the simulated dataset
     SCMS_Dir_log1 = SCMS_Log_DirKDE(cir_samp_thres, cir_samp, d=1, h=bw_Dir, 
-                                    eps=1e-8, max_iter=5000)
+                                    eps=1e-9, max_iter=5000)
     DirRidge1 = SCMS_Dir_log1[:,:,SCMS_Dir_log1.shape[2]-1]
     
     ## Take two points for plotting their directional SCMS trajectories 
     ## and linear convergence trends
     pt1 = np.array([-20, 10])
     pt1 = np.array(sph2cart(*pt1)).reshape(1,-1)
-    p1_SCMS_path = SCMS_Log_DirKDE(pt1, cir_samp, d=1, h=None, eps=1e-8, 
+    p1_SCMS_path = SCMS_Log_DirKDE(pt1, cir_samp, d=1, h=None, eps=1e-9, 
                                    max_iter=5000)
     p1_SCMS_path = np.concatenate(p1_SCMS_path, axis=0).T
     
     pt2 = np.array([20, 10])
     pt2 = np.array(sph2cart(*pt2)).reshape(1,-1)
-    p2_SCMS_path = SCMS_Log_DirKDE(pt2, cir_samp, d=1, h=None, eps=1e-8, 
+    p2_SCMS_path = SCMS_Log_DirKDE(pt2, cir_samp, d=1, h=None, eps=1e-9, 
                                    max_iter=5000)
     p2_SCMS_path = np.concatenate(p2_SCMS_path, axis=0).T
     

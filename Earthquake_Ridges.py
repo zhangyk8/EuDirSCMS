@@ -44,9 +44,9 @@ if __name__ == "__main__":
     d_EQ_Eu = KDE(query_points_ang, EQ_ang, h=bw_Eu).reshape(nrows, ncols)
     
     ## Apply directional and Euclidean SCMS algorithms to the earthquake data
-    SCMS_path_Dir = SCMS_Log_DirKDE(EQ_cart, EQ_cart, d=1, h=0.1, eps=1e-7, 
+    SCMS_path_Dir = SCMS_Log_DirKDE(EQ_cart, EQ_cart, d=1, h=0.1, eps=1e-9, 
                                     max_iter=5000)
-    SCMS_Eu_Log_EQ = SCMS_Log_KDE(EQ_ang, EQ_ang, d=1, h=7, eps=1e-7, 
+    SCMS_Eu_Log_EQ = SCMS_Log_KDE(EQ_ang, EQ_ang, d=1, h=7, eps=1e-9, 
                                   max_iter=5000)
     
     print("Generating the plots for Euclidean and directional density ridges"\
