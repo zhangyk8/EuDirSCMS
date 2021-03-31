@@ -3,7 +3,7 @@
 """
 @author: Yikun Zhang
 
-Last Editing: March 20, 2021
+Last Editing: March 31, 2021
 
 Description: This script contains code for our applications of Euclidean and 
 directional SCMS algorithms to the earthquake data (Figures C.3 in the paper).

@@ -3,7 +3,7 @@
 """
 @author: Yikun Zhang
 
-Last Editing: March 19, 2021
+Last Editing: March 31, 2021
 
 Description: This script contains code for applying Euclidean and directional 
 subspace constrained mean shift (SCMS) algorithm to simulated datasets 
@@ -14,27 +14,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.basemap import Basemap
 from Utility_fun import cart2sph, Eu_Ring_Data, Cir_Sph_samp
-from SCMS_fun import KDE, SCMS_Log_KDE
-from DirSCMS_fun import DirKDE, SCMS_Log_DirKDE
+from SCMS_fun import SCMS_Log_KDE
+from DirSCMS_fun import SCMS_Log_DirKDE
 
 
 if __name__ == "__main__":
     np.random.seed(111)  ## Set an arbitrary seed for reproducibility
     radius = 2
     ring_Eu = Eu_Ring_Data(N=1000, R=radius, sigma=0.2)
-    
-    ## Denoising step
     curr_bw = 0.35
-    d_hat_Eu = KDE(ring_Eu, ring_Eu, h=curr_bw)
-    tau = 0.1
-    print('Removing the data points whose density values are below '+str(tau)\
-          +' of the maximum density.\n')
-    ring_Eu_thres = ring_Eu[d_hat_Eu >= tau*max(d_hat_Eu),:]
-    print('Ratio of the numbers of data points after and before the denoising '\
-          'step: ' + str(ring_Eu_thres.shape[0]/ring_Eu.shape[0]) + '.\n')
     
     ## Apply the Euclidean SCMS
-    SCMS_Eu_log1 = SCMS_Log_KDE(ring_Eu_thres, ring_Eu, d=1, h=curr_bw, 
+    SCMS_Eu_log1 = SCMS_Log_KDE(ring_Eu, ring_Eu, d=1, h=curr_bw, 
                                 eps=1e-10, max_iter=5000)
     Eu_ridge_log1 = SCMS_Eu_log1[:,:,SCMS_Eu_log1.shape[2]-1]
     
@@ -62,31 +53,15 @@ if __name__ == "__main__":
     lon_c, lat_c, r = cart2sph(*cir_samp.T)
     cir_samp_ang = np.concatenate((lon_c.reshape(len(lon_c),1), 
                                    lat_c.reshape(len(lat_c),1)), axis=1)
-    
-    ## Denoising step
     bw_Dir = None
-    d_hat2_Dir = DirKDE(cir_samp, cir_samp, h=bw_Dir)
-    tau = 0.1
-    print('Removing the data points whose directional KDE values are below '
-          +str(tau)+' of the maximum density.')
-    cir_samp_thres = cir_samp[d_hat2_Dir >= tau*max(d_hat2_Dir),:]
-    print('Ratio of the numbers of data points after and before the denoising '\
-          'step: ' + str(cir_samp_thres.shape[0]/cir_samp.shape[0]) + '.\n')
     bw_Eu = None
-    d_hat2_Eu = KDE(cir_samp_ang, cir_samp_ang, h=bw_Eu)
-    tau = 0.1
-    print('Removing the data points whose Euclidean KDE values are below '\
-          +str(tau)+' of the maximum density.')
-    cir_samp_ang_thres = cir_samp_ang[d_hat2_Eu >= tau*max(d_hat2_Eu),:]
-    print('Ratio of the numbers of data points after and before the denoising '\
-          'step: ' + str(cir_samp_ang_thres.shape[0]/cir_samp_ang.shape[0]) + '.\n')
 
     ## Apply the directional and Euclidean SCMS algorithms
-    SCMS_Dir_log2 = SCMS_Log_DirKDE(cir_samp_thres, cir_samp, d=1, h=bw_Dir, 
+    SCMS_Dir_log2 = SCMS_Log_DirKDE(cir_samp, cir_samp, d=1, h=bw_Dir, 
                                     eps=1e-7, max_iter=5000)
     Dir_ridge_log2 = SCMS_Dir_log2[:,:,SCMS_Dir_log2.shape[2]-1]
     
-    SCMS_Eu_log2 = SCMS_Log_KDE(cir_samp_ang_thres, cir_samp_ang, d=1, h=bw_Eu, 
+    SCMS_Eu_log2 = SCMS_Log_KDE(cir_samp_ang, cir_samp_ang, d=1, h=bw_Eu, 
                                 eps=1e-7, max_iter=5000)
     Eu_ridge_log2 = SCMS_Eu_log2[:,:,SCMS_Eu_log2.shape[2]-1]
     
