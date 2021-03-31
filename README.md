@@ -85,8 +85,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.basemap import Basemap
 from Utility_fun import cart2sph, Cir_Sph_samp
-from SCMS_fun import KDE, SCMS_Log_KDE
-from DirSCMS_fun import DirKDE, SCMS_Log_DirKDE
+from SCMS_fun import SCMS_Log_KDE
+from DirSCMS_fun import SCMS_Log_DirKDE
 
 np.random.seed(111)  ## Set an arbitrary seed for reproducibility
 ## Sampling the points on a circle that crosses through the north and south poles
@@ -94,31 +94,15 @@ cir_samp = Cir_Sph_samp(1000, lat_c=0, sigma=0.2, pv_ax=np.array([1,0,0]))
 lon_c, lat_c, r = cart2sph(*cir_samp.T)
 cir_samp_ang = np.concatenate((lon_c.reshape(len(lon_c),1), 
                                lat_c.reshape(len(lat_c),1)), axis=1)
-    
-## Denoising step
 bw_Dir = None
-d_hat2_Dir = DirKDE(cir_samp, cir_samp, h=bw_Dir)
-tau = 0.1
-print('Removing the data points whose directional KDE values are below '
-      +str(tau)+' of the maximum density.')
-cir_samp_thres = cir_samp[d_hat2_Dir >= tau*max(d_hat2_Dir),:]
-print('Ratio of the numbers of data points after and before the denoising '\
-      'step: ' + str(cir_samp_thres.shape[0]/cir_samp.shape[0]) + '.\n')
 bw_Eu = None
-d_hat2_Eu = KDE(cir_samp_ang, cir_samp_ang, h=bw_Eu)
-tau = 0.1
-print('Removing the data points whose Euclidean KDE values are below '\
-      +str(tau)+' of the maximum density.')
-cir_samp_ang_thres = cir_samp_ang[d_hat2_Eu >= tau*max(d_hat2_Eu),:]
-print('Ratio of the numbers of data points after and before the denoising '\
-      'step: ' + str(cir_samp_ang_thres.shape[0]/cir_samp_ang.shape[0]) + '.\n')
 
 ## Apply the directional and Euclidean SCMS algorithms
-SCMS_Dir_log2 = SCMS_Log_DirKDE(cir_samp_thres, cir_samp, d=1, h=bw_Dir, 
+SCMS_Dir_log2 = SCMS_Log_DirKDE(cir_samp, cir_samp, d=1, h=bw_Dir, 
                                 eps=1e-7, max_iter=5000)
 Dir_ridge_log2 = SCMS_Dir_log2[:,:,SCMS_Dir_log2.shape[2]-1]
     
-SCMS_Eu_log2 = SCMS_Log_KDE(cir_samp_ang_thres, cir_samp_ang, d=1, h=bw_Eu, 
+SCMS_Eu_log2 = SCMS_Log_KDE(cir_samp_ang, cir_samp_ang, d=1, h=bw_Eu, 
                             eps=1e-7, max_iter=5000)
 Eu_ridge_log2 = SCMS_Eu_log2[:,:,SCMS_Eu_log2.shape[2]-1]
     
