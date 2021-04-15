@@ -106,7 +106,7 @@ if __name__ == "__main__":
     x, y = m2(lon, lat)
     cs = m2.scatter(x3, y3, color='red', s=40, marker='D')
     # cs = m2.contour(x, y, d_EQ_Eu, linewidths=3, cmap='hsv')
-    plt.title('Earthquake Ridges on the World Map (h=8.0)')
+    plt.title('Earthquake Ridges on the World Map (h=7.0)')
     fig.savefig('./Figures/Earth_Ridges_Eu_SCMS.pdf')
     
     fig = plt.figure(figsize=(14,8))
