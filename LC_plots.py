@@ -3,7 +3,7 @@
 """
 @author: Yikun Zhang
 
-Last Editing: March 31, 2021
+Last Editing: April 7, 2021
 
 Description: This script contains code for empirically verifying the linear 
 convergence of Euclidean and directional SCMS algorithms (Figures C.1 and C.2 
@@ -31,6 +31,16 @@ if __name__ == "__main__":
     np.random.seed(123)  ## Set an arbitrary seed for reproducibility
     Gau_data = Gauss_Mix(1000, mu=mu2, cov=cov2, prob=prob2)
     
+    ## Denoising step
+    Eu_bw=None
+    d_que1 = KDE(Gau_data, Gau_data, h=Eu_bw)
+    tau = 0.25
+    print('Removing the data points whose density values are below '+str(tau)\
+          +' of the maximum density.')
+    Gau_data_thres = Gau_data[d_que1 >= tau*max(d_que1),:]
+    print('Ratio of the numbers of data points after and before the denoising '\
+          'step: ' + str(Gau_data_thres.shape[0]/Gau_data.shape[0]) + '.\n')
+    
     ## Estimate the densities on query points
     n_x = 100
     n_y = 100
@@ -42,7 +52,7 @@ if __name__ == "__main__":
     Z1 = d_hat1.reshape(n_x, n_y)
     
     ## Apply Euclidean SCMS algorithm to the denoised Gaussian mixture synthetic dataset
-    SCMS_log_path = SCMS_Log_KDE(Gau_data, Gau_data, d=1, h=None, 
+    SCMS_log_path = SCMS_Log_KDE(Gau_data_thres, Gau_data, d=1, h=None, 
                                  eps=1e-9, max_iter=5000, stop_cri='proj_grad')
     ridge_pts2 = SCMS_log_path[:,:,SCMS_log_path.shape[2]-1]
     
@@ -109,7 +119,16 @@ if __name__ == "__main__":
     np.random.seed(123)  ## Set an arbitrary seed for reproducibility
     radius = 2
     ring_Eu = Eu_Ring_Data(N=1000, R=radius, sigma=0.3, half=True)
+    
+    ## Denoising step
     curr_bw = None
+    d_hat_Eu = KDE(ring_Eu, ring_Eu, h=curr_bw)
+    tau = 0.25
+    print('Removing the data points whose density values are below '\
+          +str(tau)+' of the maximum density.')
+    ring_Eu_thres = ring_Eu[d_hat_Eu >= tau*max(d_hat_Eu),:]
+    print('Ratio of the numbers of data points after and before the denoising '\
+          'step: ' + str(ring_Eu_thres.shape[0]/ring_Eu.shape[0]) + '.\n')
     
     ## Estimate the density values on query points
     n_x = 100
@@ -123,7 +142,7 @@ if __name__ == "__main__":
     Z2 = d_hat2.reshape(n_x, n_y)
     
     ## Apply Euclidean SCMS algorithm to the half-circle simulated dataset
-    SCMS_Eu_log2 = SCMS_Log_KDE(ring_Eu, ring_Eu, d=1, h=curr_bw, 
+    SCMS_Eu_log2 = SCMS_Log_KDE(ring_Eu_thres, ring_Eu, d=1, h=curr_bw, 
                                 eps=1e-9, max_iter=5000)
     Eu_ridge_log2 = SCMS_Eu_log2[:,:,SCMS_Eu_log2.shape[2]-1]
     
@@ -193,7 +212,16 @@ if __name__ == "__main__":
     prob2 = [0.4, 0.6]
     np.random.seed(101)  ## Set an arbitrary seed for reproducibility
     vMF_data2 = vMF_samp_mix(1000, mu=mu2, kappa=kappa2, prob=prob2)
+    
+    ## Denoising step
     curr_bw = None
+    d_que1 = DirKDE(vMF_data2, vMF_data2, h=curr_bw)
+    tau = 0.1
+    print('Removing the data points whose directional density values are below '\
+          +str(tau)+' of the maximum density.')
+    qpts_thres = vMF_data2[d_que1 >= tau*max(d_que1),:]
+    print('Ratio of the numbers of data points after and before the denoising '\
+          'step: ' + str(qpts_thres.shape[0]/vMF_data2.shape[0]) + '.\n')
     
     ## Estimate the directional densities on query points
     nrows, ncols = (90, 180)
@@ -206,7 +234,7 @@ if __name__ == "__main__":
     d_hat2 = DirKDE(query_points, vMF_data2).reshape(nrows, ncols)
     
     ## Apply our directional SCMS algorithm to synthetic vMF-distributed data points
-    SCMS_path2_log = SCMS_Log_DirKDE(vMF_data2, vMF_data2, d=1, h=None, 
+    SCMS_path2_log = SCMS_Log_DirKDE(qpts_thres, vMF_data2, d=1, h=None, 
                                      eps=1e-9, max_iter=5000)
     vMF_Ridge2 = SCMS_path2_log[:,:,SCMS_path2_log.shape[2]-1]
     
