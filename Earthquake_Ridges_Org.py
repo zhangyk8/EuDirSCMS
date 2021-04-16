@@ -78,7 +78,7 @@ if __name__ == "__main__":
     x3, y3 = m2(lon3, lat3)
     x, y = m2(lon, lat)
     cs = m2.scatter(x3, y3, color='red', s=40, marker='D')
-    cs = m2.contour(x, y, d_EQ_Eu, linewidths=3, cmap='hsv')
+    # cs = m2.contour(x, y, d_EQ_Eu, linewidths=3, cmap='hsv')
     plt.title('Earthquake Ridges on the World Map (h=7.0)')
     fig.savefig('./Figures/Earth_Ridges_Eu_SCMS.pdf')
     
@@ -96,7 +96,7 @@ if __name__ == "__main__":
     x1, y1 = m1(lon1, lat1)
     x, y = m1(lon, lat)
     cs = m1.scatter(x1, y1, color='red', s=40, marker='D')
-    cs = m1.contour(x, y, d_EQ, linewidths=3, cmap='hsv')
+    # cs = m1.contour(x, y, d_EQ, linewidths=3, cmap='hsv')
     plt.title('Earthquake Ridges on the World Map (h=0.1)')
     fig.savefig('./Figures/Earth_Ridges_Dir_SCMS.pdf')
     
