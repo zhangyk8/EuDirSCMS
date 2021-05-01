@@ -8,16 +8,17 @@ This repository implements both the classical SCMS algorithm (Ozertem and Erdogm
 - Python >= 3.6 (earlier version might be applicable).
 - [NumPy](http://www.numpy.org/), [Matplotlib](https://matplotlib.org/) (especially the [Basemap](https://matplotlib.org/basemap/) toolkit), [pandas](https://pandas.pydata.org/), [SciPy](https://www.scipy.org/) (A speical function [scipy.special.iv](https://docs.scipy.org/doc/scipy/reference/generated/scipy.special.iv.html#scipy.special.iv) is used to compute the modified Bessel function of the first kind of real order.
 - (Optional) [Ray](https://ray.io/) (Fast and simple distributed computing API for Python and Java)
+- We provide an [guideline](https://github.com/zhangyk8/DirMS/blob/main/Install_Basemap_Ubuntu.md) of installing the [Basemap](https://matplotlib.org/basemap/) toolkit on Ubuntu.
 
 ### Descriptions
 
 Some high-level descriptions of our Python scripts are as follows:
 
 - **DirSCMS_fun.py**: This script implements the functions of directional KDE and subspace constrained mean shift (SCMS) algorithm with the von Mises kernel.
-- **Drawback_Eu.py**: This script contains code for comparing Euclidean KDE with directional KDE as well as comparing Euclidean subspace constrained mean shift (SCMS) with our proposed directional SCMS algorithm on simulated datasets in order to illustrate the drawbacks of Euclidean KDE and SCMS algorithm in handling directional data (Figure B.2 in the paper).
-- **Earthquake_Ridges.py**: This script contains code for our applications of Euclidean and directional SCMS algorithms to the earthquake data (Figures C.3 in the paper).
+- **Drawback_Eu.py**: This script contains code for comparing Euclidean KDE with directional KDE as well as comparing Euclidean subspace constrained mean shift (SCMS) with our proposed directional SCMS algorithm on simulated datasets in order to illustrate the drawbacks of Euclidean KDE and SCMS algorithm in handling directional data (Figure 4 in the paper).
+- **Earthquake_Ridges.py**: This script contains code for our applications of Euclidean and directional SCMS algorithms to the earthquake data (Figures 6 in the paper). This script may take more than half an hour to execute, depending on the actual computing platform.
 - **Eu_Dir_Ridges_Fast.py**: This script contains code for applying Euclidean and directional subspace constrained mean shift (SCMS) algorithms to simulated datasets (Figure 1.1 in the paper). Different from the script **Eu_Dir_Ridges_Org.py**, the two SCMS algorithms are parallelized by [Ray](https://ray.io/). This script takes only several minutes to run on a laptop with 8 CPU cores.
-- **Eu_Dir_Ridges_Org.py**: This script contains code for applying Euclidean and directional subspace constrained mean shift (SCMS) algorithms to simulated datasets (Figure 1.1 in the paper). This script may take more than half an hour to execute, depending on the actual computing platform.
+- **Eu_Dir_Ridges_Org.py**: This script contains code for applying Euclidean and directional subspace constrained mean shift (SCMS) algorithms to simulated datasets (Figure 1.1 in the paper). 
 - **LC_plots.py**: This script contains code for empirically verifying the linear convergence of Euclidean and directional SCMS algorithms (Figures C.1 and C.2 in the paper).
 - **MS_SCMS_Ray.py**: This script contains code for the parallel implementations of Euclidean/directional mean shift and SCMS algorithms.
 - **SCMS_fun.py**: This script contains code for Euclidean KDE and subspace constrained mean shift (SCMS) algorithm with Gaussian kernel.
