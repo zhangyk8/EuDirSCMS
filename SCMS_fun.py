@@ -285,7 +285,7 @@ def SCMS_Log_KDE(mesh_0, data, d=1, h=None, eps=1e-7, max_iter=1000,
                 ms_v = np.sum(data*np.exp(np.sum(-((x_pts - data)/h)**2, axis=1)/2).reshape(n,-1), axis=0) \
                        / np.sum(np.exp(np.sum(-((x_pts - data)/h)**2, axis=1)/2)) - x_pts
                 ## Subspace constrained gradient and mean shift vector
-                SCMS_grad = np.dot(V_d, np.dot(V_d.T, Grad))
+                SCMS_grad = np.dot(V_d, np.dot(V_d.T, Log_grad))
                 SCMS_v = np.dot(V_d, np.dot(V_d.T, ms_v))
                 ## SCMS update
                 x_new = SCMS_v + x_pts

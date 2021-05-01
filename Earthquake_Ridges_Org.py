@@ -6,9 +6,9 @@
 Last Editing: April 15, 2021
 
 Description: This script contains code for our applications of Euclidean and 
-directional SCMS algorithms to the earthquake data (Figures C.3 in the paper).
-This script may take more than half an hour to execute, depending on the actual 
-computing platform.
+directional SCMS algorithms to the earthquake data (Figure 7 in the arxiv 
+version of the paper). This script may take more than half an hour to execute, 
+depending on the actual computing platform.
 """
 
 import matplotlib.pyplot as plt
@@ -16,6 +16,7 @@ import numpy as np
 from numpy import linalg as LA
 import pandas as pd
 from mpl_toolkits.basemap import Basemap
+from matplotlib import rc
 from Utility_fun import cart2sph, sph2cart
 from SCMS_fun import KDE, SCMS_Log_KDE
 from DirSCMS_fun import DirKDE, SCMS_Log_DirKDE
@@ -62,6 +63,7 @@ if __name__ == "__main__":
     
     print("Generating the plots for Euclidean and directional density ridges"\
           " on the earthquake data. \n")
+    rc('text', usetex=True)   ## Use the latex in labels or axes
     plt.rcParams.update({'font.size': 13})  ## Change the font sizes of ouput figures
     fig = plt.figure(figsize=(14,8))
     curr_step = SCMS_Eu_Log_EQ.shape[2]-1

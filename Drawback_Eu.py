@@ -9,7 +9,7 @@ Description: This script contains code for comparing Euclidean KDE with
 directional KDE as well as comparing Euclidean subspace constrained mean shift 
 (SCMS) with our proposed directional SCMS algorithm on simulated datasets in 
 order to illustrate the drawbacks of Euclidean KDE and SCMS algorithm in 
-handling directional data (Figure B.2 in the paper).
+handling directional data (Figure 4 in the arxiv version of the paper).
 """
 
 import matplotlib.pyplot as plt

@@ -6,8 +6,8 @@
 Last Editing: April 7, 2021
 
 Description: This script contains code for empirically verifying the linear 
-convergence of Euclidean and directional SCMS algorithms (Figures C.1 and C.2 
-in the paper).
+convergence of Euclidean and directional SCMS algorithms (Figures 5 and 6 in 
+the arxiv version of the paper).
 """
 
 import matplotlib.pyplot as plt

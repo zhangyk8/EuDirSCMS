@@ -7,7 +7,7 @@ Last Editing: March 31, 2021
 
 Description: This script contains code for applying Euclidean and directional 
 subspace constrained mean shift (SCMS) algorithm to simulated datasets 
-(Figure 1.1 in the paper).
+(Figure 1 in the arxiv version of the paper).
 """
 
 import matplotlib.pyplot as plt
