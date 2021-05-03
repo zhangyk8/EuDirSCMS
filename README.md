@@ -1,7 +1,7 @@
 ## Euclidean and Directional Subspace Constrained Mean Shift (SCMS) Algorithms
 This repository implements both the classical SCMS algorithm (Ozertem and Erdogmus, 2011) with Euclidean data and our proposed SCMS algorithm under the directional data setting via Python3.
 
-- Paper Reference: 
+- Paper Reference: [Linear Convergence of the Subspace Constrained Mean Shift Algorithm: From Euclidean to Directional Data](https://arxiv.org/abs/2104.14977) (2021)
 
 ### Requirements
 
