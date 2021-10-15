@@ -141,7 +141,7 @@ fig.savefig('./Figures/Output.png')
  <br><B>Fig 1. </B>An illustration of Euclidean and directional SCMS algorithms applied to a simulated dataset with an underlying circular structure on the sphere. (Here, The red points represent the estimated directional ridge identified by our directional SCMS algorithm. The green points indicate the estimated ridge obtained by the Euclidean SCMS algorithm. And the blue curve exhibits the true circular structure.)
  </p>
 
-### Additional Reference
+### Additional References
 - U. Ozertem and D. Erdogmus (2011). Locally Defined Principal Curves and Surfaces. _Journal of Machine Learning Research_ **12** 1249-1286.
 - Y. Zhang and Y.-C. Chen (2020). Kernel Smoothing, Mean Shift, and Their Learning Theory with Directional Data. _arXiv preprint arXiv:2010.13523_.
 - E. Garcı́a-Portugués (2013). Exact risk improvement of bandwidth selectors for kernel density estimation with directional data. _Electronic Journal of Statistics_ **7** 1655–1685.
