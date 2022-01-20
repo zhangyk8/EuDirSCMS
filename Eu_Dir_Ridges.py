@@ -3,11 +3,11 @@
 """
 @author: Yikun Zhang
 
-Last Editing: March 31, 2021
+Last Editing: November 10, 2021
 
-Description: This script contains code for applying Euclidean and directional 
-subspace constrained mean shift (SCMS) algorithm to simulated datasets 
-(Figure 1 in the arxiv version of the paper).
+Description: This script contains code for applying the Euclidean and directional 
+subspace constrained mean shift (SCMS) algorithm to the simulated datasets 
+(Figure 1 in the paper).
 """
 
 import matplotlib.pyplot as plt
@@ -36,12 +36,15 @@ if __name__ == "__main__":
     fig = plt.figure(figsize=(6,6))
     theta = np.linspace(0, 2*np.pi, 50)
     plt.scatter(ring_Eu[:,0], ring_Eu[:,1], facecolors='none', 
-                edgecolors='black', s=7)
+                edgecolors='black', s=10, label='Simulated points')
     plt.plot(radius*np.cos(theta), radius*np.sin(theta), color='blue', 
-             linewidth=2)
-    plt.scatter(Eu_ridge_log1[:,0], Eu_ridge_log1[:,1], color='red', s=10)
+             linewidth=3, label='Hidden manifold')
+    plt.scatter(Eu_ridge_log1[:,0], Eu_ridge_log1[:,1], color='orange', s=30,
+                label='Euclidean ridges')
     plt.axis('equal')
     plt.axis('off')
+    plt.legend()
+    fig.tight_layout()
     fig.savefig('./Figures/Ring_data_Eu.pdf')
     
     print("Save the plot as 'Ring_data_Eu.pdf'.\n\n")
@@ -67,7 +70,7 @@ if __name__ == "__main__":
     
     print("Generating the plot of Euclidean and directional SCMS algorithms on "\
           "the simulated ring dataset on the sphere. \n")
-    fig = plt.figure(figsize=(14,8))
+    fig = plt.figure(figsize=(12,8))
     lon_t = np.concatenate([90*np.ones(50,), -90*np.ones(50,)])
     lat_t = np.concatenate([np.linspace(-90, 90, 50), np.linspace(90, -90, 50)])
     lon_c, lat_c, r = cart2sph(*cir_samp.T)
@@ -86,10 +89,16 @@ if __name__ == "__main__":
     x_Eu, y_Eu = m1(lon_r_Eu, lat_r_Eu)
     x_Dir, y_Dir = m1(lon_r_Dir, lat_r_Dir)
     # Scatter plots over the map.
-    cs = m1.scatter(x, y, facecolors='none', edgecolors='black', s=20)
-    cs = m1.plot(x_t, y_t, color='blue', linewidth=4, alpha=0.5)
-    cs = m1.scatter(x_Eu, y_Eu, color='darkgreen', s=25, alpha=1)
-    cs = m1.scatter(x_Dir, y_Dir, color='red', s=35, alpha=0.7)
+    cs = m1.scatter(x, y, facecolors='none', edgecolors='black', s=20, 
+                    label='Simulated points')
+    cs = m1.plot(x_t, y_t, color='blue', linewidth=3.5, alpha=0.8, 
+                 label='Hidden manifold')
+    cs = m1.scatter(x_Dir, y_Dir, color='red', s=60, alpha=1, 
+                    label='Directional ridges')
+    cs = m1.scatter(x_Eu, y_Eu, color='orange', s=55, alpha=0.8, 
+                    label='Euclidean ridges')
+    plt.legend()
+    fig.tight_layout()
     fig.savefig('./Figures/Ring_on_Sphere_hammer.pdf')
     
     print("Save the plot as 'Ring_on_Sphere_hammer.pdf'.\n\n")
