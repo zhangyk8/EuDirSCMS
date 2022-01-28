@@ -14,13 +14,15 @@ This repository implements both the classical SCMS algorithm (Ozertem and Erdogm
 
 Some high-level descriptions of our Python scripts are as follows:
 
+- **Density_Example.py**: This script contains the code for plotting the contour lines and (principal/subspace constrained) gradient flows of the example function (Figure 2 in the paper).
 - **DirSCMS_fun.py**: This script implements the functions of directional KDE and subspace constrained mean shift (SCMS) algorithm with the von Mises kernel.
-- **Drawback_Eu.py**: This script contains code for comparing Euclidean KDE with directional KDE as well as comparing Euclidean subspace constrained mean shift (SCMS) with our proposed directional SCMS algorithm on simulated datasets in order to illustrate the drawbacks of Euclidean KDE and SCMS algorithm in handling directional data (Figure 4 in the arxiv version of the paper).
-- **Earthquake_Ridges_Org.py**: This script contains code for our applications of Euclidean and directional SCMS algorithms to the earthquake data (Figure 7 in the arxiv version of the paper). This script may take more than half an hour to execute, depending on the actual computing platform.
-- **Eu_Dir_Ridges_Fast.py**: This script contains code for our applications of Euclidean and directional SCMS algorithms to the earthquake data (Figure 7 in the arxiv version of the paper). Different from the corresponding script **Earthquake_Ridges_Org.py**, the two SCMS algorithms are parallelized by [Ray](https://ray.io/). This script takes only several minutes to run on my laptop with 8 CPU cores.
-- **Eu_Dir_Ridges_Org.py**: This script contains code for applying Euclidean and directional subspace constrained mean shift (SCMS) algorithms to simulated datasets (Figure 1 in the arxiv version of the paper). 
-- **LC_plots.py**: This script contains code for empirically verifying the linear convergence of Euclidean and directional SCMS algorithms (Figures 5 and 6 in the arxiv version of the paper).
+- **Drawback_Eu.py**: This script contains code for comparing Euclidean KDE with directional KDE as well as comparing Euclidean subspace constrained mean shift (SCMS) with our proposed directional SCMS algorithm on simulated datasets in order to illustrate the drawbacks of Euclidean KDE and SCMS algorithm in handling directional data (Figures 9 and 10 in the paper).
+- **Earthquake_Ridges_Org.py**: This script contains code for our applications of Euclidean and directional SCMS algorithms to the earthquake data (Figure 6 in the paper) and their comparisons with the real boundaries of tectonic plates. This script may take around half an hour to execute, depending on the actual computing platform.
+- **Earthquake_Ridges_Fast.py**: This script contains code for our applications of Euclidean and directional SCMS algorithms to the earthquake data (Figure 6 in the paper) and their comparisons with the real boundaries of tectonic plates. Different from the corresponding script **Earthquake_Ridges_Org.py**, the two SCMS algorithms are parallelized by [Ray](https://ray.io/). This script takes only several minutes to run on my laptop with 8 CPU cores.
+- **Eu_Dir_Ridges.py**: This script contains code for applying the Euclidean and directional subspace constrained mean shift (SCMS) algorithm to the simulated datasets (Figure 1 in the paper).
+- **LC_plots.py**: This script contains code for empirically verifying the linear convergence of the Euclidean and directional SCMS algorithms (Figures 4 and 5 in the paper).
 - **MS_SCMS_Ray.py**: This script contains code for the parallel implementations of Euclidean/directional mean shift and SCMS algorithms.
+- **SCMS_Log_Density_Comp.py**: This script contains code for empirically demonstrating that the (Euclidean/directional) SCMS algorithms with the logarithm of the estimated densities are faster than their counterparts with the original densities (Figure 7 in the paper).
 - **SCMS_fun.py**: This script contains code for Euclidean KDE and subspace constrained mean shift (SCMS) algorithm with Gaussian kernel.
 - **Utility_fun.py**: This script contains all the utility functions for our experiments.
 
