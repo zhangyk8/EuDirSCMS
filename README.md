@@ -1,7 +1,7 @@
 ## Euclidean and Directional Subspace Constrained Mean Shift (SCMS) Algorithms
 This repository implements both the classical SCMS algorithm (Ozertem and Erdogmus, 2011) with Euclidean data and our proposed SCMS algorithm under the directional data setting via Python3.
 
-- Paper Reference: [Linear Convergence of the Subspace Constrained Mean Shift Algorithm: From Euclidean to Directional Data](https://arxiv.org/abs/2104.14977) (2021)
+- Paper Reference: Y. Zhang and Y.-C. Chen (2023). [Linear Convergence of the Subspace Constrained Mean Shift Algorithm: From Euclidean to Directional Data](https://doi.org/10.1093/imaiai/iaac005) _Information and Inference: A Journal of the IMA_, **12**(1), 210-311.
 
 ### Requirements
 
@@ -145,6 +145,6 @@ fig.savefig('./Figures/Output.png')
 
 ### Additional References
 - U. Ozertem and D. Erdogmus (2011). Locally Defined Principal Curves and Surfaces. _Journal of Machine Learning Research_ **12** 1249-1286.
-- Y. Zhang and Y.-C. Chen (2020). Kernel Smoothing, Mean Shift, and Their Learning Theory with Directional Data. _arXiv preprint arXiv:2010.13523_.
+- Y. Zhang and Y.-C. Chen (2021). Kernel Smoothing, Mean Shift, and Their Learning Theory with Directional Data. _Journal of Machine Learning Research_ **22**(154), 1-92.
 - E. Garcı́a-Portugués (2013). Exact risk improvement of bandwidth selectors for kernel density estimation with directional data. _Electronic Journal of Statistics_ **7** 1655–1685.
 - Y.-C. Chen, C. Genovese, and L. Wasserman (2016). [A comprehensive approach to mode clustering](https://projecteuclid.org/euclid.ejs/1455715961). _Electronic Journal of Statistics_ **10**(1) 210-241.
