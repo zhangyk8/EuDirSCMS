@@ -45,7 +45,7 @@ def KDE(x, data, h=None):
     f_hat = np.zeros((x.shape[0], ))
     for i in range(x.shape[0]):
         f_hat[i] = np.mean(np.exp(np.sum(-((x[i,:] - data)/h)**2, axis=1)/2))/ \
-                   ((2*np.pi)**(d/2)*np.prod(h))
+                   ((2*np.pi)**(d/2)*h**d)
     return f_hat
 
 
